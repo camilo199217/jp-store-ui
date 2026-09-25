@@ -4,9 +4,15 @@
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
 import type { ApiResponse, Product, PaginatedResult, Customer, Transaction } from '@/types/index.js'
 
-// Instancia de axios configurada para nuestro backend
+// Instancia de axios configurada para nuestro backend.
+// En dev usa el proxy de Vite (/api → localhost:3000).
+// En producción apunta al ALB via VITE_API_URL.
+const API_BASE = import.meta.env.VITE_API_URL
+  ? `${import.meta.env.VITE_API_URL}/api/v1`
+  : '/api/v1'
+
 const http: AxiosInstance = axios.create({
-  baseURL: '/api/v1',
+  baseURL: API_BASE,
   timeout: 15_000,
   headers: { 'Content-Type': 'application/json' },
 })
