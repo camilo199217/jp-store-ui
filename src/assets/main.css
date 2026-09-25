@@ -1,0 +1,104 @@
+/* Estilos base — Tailwind directives + variables CSS globales */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS para el tema oscuro */
+:root {
+  --bg-primary: #0D0D1A;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --gradient-hero: linear-gradient(135deg, #0D0D1A 0%, #1A1A2E 50%, #16213E 100%);
+}
+
+/* Reset y base */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: #f8fafc;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar personalizado para el tema oscuro */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0D0D1A; }
+::-webkit-scrollbar-thumb { background: rgba(124, 58, 237, 0.4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(124, 58, 237, 0.7); }
+
+/* Componentes reutilizables con @apply */
+@layer components {
+  /* Card glassmorphism */
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl;
+  }
+
+  /* Input base del formulario */
+  .form-input {
+    @apply w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3
+           text-ink-100 placeholder-ink-400
+           focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50
+           transition-all duration-200;
+  }
+
+  /* Etiqueta flotante */
+  .form-label {
+    @apply block text-sm font-medium text-ink-400 mb-1.5;
+  }
+
+  /* Botón primario */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-700 text-white font-semibold
+           px-6 py-3 rounded-xl transition-all duration-200
+           hover:shadow-glow active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Botón secundario / outline */
+  .btn-ghost {
+    @apply border border-white/20 text-ink-200 hover:bg-white/5
+           px-6 py-3 rounded-xl transition-all duration-200 active:scale-95;
+  }
+
+  /* Badge de estado */
+  .status-badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold;
+  }
+
+  /* Skeleton loader */
+  .skeleton {
+    @apply rounded-lg animate-pulse bg-gradient-to-r from-white/5 via-white/10 to-white/5
+           bg-[length:200%_100%] animate-shimmer;
+  }
+
+  /* Separador con gradiente */
+  .divider {
+    @apply border-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-4;
+  }
+}
+
+/* Transiciones de ruta (Vue Router) — fade sin mode, no depende de transitionend */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Flip 3D para la tarjeta de crédito */
+.card-scene { perspective: 1000px; }
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-3d.is-flipped { transform: rotateY(180deg); }
+.card-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-face-back { transform: rotateY(180deg); }
