@@ -1,0 +1,33 @@
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Build
+dist/
+dist-ssr/
+
+# Variables de entorno — NUNCA subir el .env real
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# macOS
+.DS_Store
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
