@@ -94,20 +94,26 @@ En modo `DEV` aparece un botón ámbar (beaker) en la esquina inferior derecha c
 Herramienta: **Vitest** (API 100% compatible con Jest)
 
 ```
-Test Files  9 passed (9)
-Tests       57 passed (57)
+Test Files  22 passed (22)
+Tests      121 passed (121)
+```
+
+### Cobertura global
+
+```
+All files  | 91.41% Stmts | 81.36% Branches | 88.57% Funcs | 91.41% Lines
 ```
 
 ### Cobertura por módulo
 
-| Módulo | Archivos | Statements | Branches | Funciones |
-|---|---|---|---|---|
-| `composables/` | useCardDetection, usePriceFormat | 100% | 78.57% | 100% |
-| `components/atoms/` | BaseBadge, BaseButton, BaseInput | 100% | 92% | 100% |
-| `components/molecules/` | ProductCard, ToastNotification | 100% | 100% | 100% |
-| `store/modules/` | checkout, products | 86.75% | 65.9% | 69.44% |
-
-> La cobertura global del proyecto es 22.63% porque incluye vistas y organismos (CheckoutForm, ProductGrid, FinalStatusView, etc.) que requieren integración completa con el backend de Wompi para ser probados de forma significativa, y cuya lógica está cubierta indirectamente por los tests de store y composables.
+| Módulo | Statements | Branches | Funciones |
+|---|---|---|---|
+| `components/atoms/` | 100% | 100% | 100% |
+| `components/molecules/` | 100% | 100% | 100% |
+| `components/organisms/` | 95.45% | 84.61% | 87.5% |
+| `composables/` | 100% | 78.57% | 100% |
+| `store/modules/` | 89.23% | 71.42% | 80% |
+| `views/` | 84.13% | 73.07% | 84.21% |
 
 ## Variables de entorno
 
