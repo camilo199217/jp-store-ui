@@ -1,7 +1,6 @@
 // Módulo Vuex para el checkout — es el más crítico de la app.
-// Persisto el estado en sessionStorage para la resiliencia en caso de refresh:
-// si el usuario recarga en medio del proceso, recuperamos donde iba.
-// Los datos de tarjeta NUNCA se guardan en storage — solo el token de pago.
+// La persistencia cifrada se gestiona en store/index.ts mediante vuex-persistedstate + secure-ls.
+// Los datos de tarjeta en crudo (cardNumber, cardCvv) NUNCA salen de este módulo en memoria.
 import type { Module } from 'vuex'
 import type { RootState } from '../index.js'
 import type { CheckoutFormData, Customer, Transaction } from '@/types/index.js'
@@ -19,57 +18,15 @@ export interface CheckoutState {
   error: string | null
 }
 
-// Clave de sessionStorage para persistencia durante la sesión
-const STORAGE_KEY = 'checkout_session'
-
-// Cargo el estado previo si existe (resiliencia en refresh)
-function loadFromStorage(): Partial<CheckoutState> {
-  try {
-    const raw = sessionStorage.getItem(STORAGE_KEY)
-    if (!raw) return {}
-    const parsed = JSON.parse(raw) as Partial<CheckoutState>
-    // Los datos de tarjeta sensibles nunca los persisto
-    if (parsed.formData) {
-      delete parsed.formData.cardNumber
-      delete parsed.formData.cardCvv
-      delete parsed.formData.cardToken
-    }
-    return parsed
-  } catch {
-    return {}
-  }
-}
-
-function saveToStorage(state: CheckoutState): void {
-  // Solo guardo lo necesario para recuperar el progreso — nunca datos de tarjeta
-  const toSave = {
-    step: state.step,
-    customer: state.customer,
-    transaction: state.transaction,
-    gatewayStatus: state.gatewayStatus,
-    formData: {
-      // Solo datos no sensibles del formulario
-      fullName: state.formData?.fullName,
-      email: state.formData?.email,
-      phone: state.formData?.phone,
-      address: state.formData?.address,
-      city: state.formData?.city,
-    },
-  }
-  sessionStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
-}
-
-const saved = loadFromStorage()
-
 const checkoutModule: Module<CheckoutState, RootState> = {
   namespaced: true,
 
   state: (): CheckoutState => ({
-    step: saved.step ?? 'products',
-    formData: saved.formData ?? {},
-    customer: saved.customer ?? null,
-    transaction: saved.transaction ?? null,
-    gatewayStatus: saved.gatewayStatus ?? null,
+    step: 'products',
+    formData: {},
+    customer: null,
+    transaction: null,
+    gatewayStatus: null,
     processing: false,
     error: null,
   }),
@@ -86,23 +43,18 @@ const checkoutModule: Module<CheckoutState, RootState> = {
   mutations: {
     SET_STEP(state, step: CheckoutStep) {
       state.step = step
-      saveToStorage(state)
     },
     SET_FORM_DATA(state, data: Partial<CheckoutFormData>) {
       state.formData = { ...state.formData, ...data }
-      saveToStorage(state)
     },
     SET_CUSTOMER(state, customer: Customer) {
       state.customer = customer
-      saveToStorage(state)
     },
     SET_TRANSACTION(state, tx: Transaction) {
       state.transaction = tx
-      saveToStorage(state)
     },
     SET_GATEWAY_STATUS(state, status: string) {
       state.gatewayStatus = status
-      saveToStorage(state)
     },
     SET_PROCESSING(state, processing: boolean) { state.processing = processing },
     SET_ERROR(state, error: string | null) { state.error = error },
@@ -114,7 +66,6 @@ const checkoutModule: Module<CheckoutState, RootState> = {
       state.gatewayStatus = null
       state.processing = false
       state.error = null
-      sessionStorage.removeItem(STORAGE_KEY)
     },
   },
 

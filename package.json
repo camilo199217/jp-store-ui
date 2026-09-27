@@ -17,11 +17,13 @@
     "axios": "^1.7.9",
     "canvas-confetti": "^1.9.4",
     "credit-card-type": "^10.3.0",
+    "secure-ls": "^2.0.0",
     "vee-validate": "^4.14.7",
     "vue": "^3.5.13",
     "vue-i18n": "^10.0.5",
     "vue-router": "^4.5.0",
     "vuex": "^4.1.0",
+    "vuex-persistedstate": "^4.1.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {
