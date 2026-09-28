@@ -2,10 +2,15 @@
 
 Frontend de la tienda jp-store. Vue 3 + Vite + TailwindCSS con integración al backend NestJS.
 
+## App en producción
+
+**https://d1ooypu8bqmie2.cloudfront.net**
+
 ## Stack
 
 - **Vue 3** (Composition API, `<script setup>`)
 - **Vuex 4** — gestión de estado (módulos: `products`, `checkout`)
+- **vuex-persistedstate** + **secure-ls** — persistencia cifrada AES del estado en localStorage (resiliencia en refresh)
 - **VeeValidate** — validación de formularios en tiempo real
 - **vue-i18n** — internacionalización (ES)
 - **TailwindCSS** — estilos
@@ -63,8 +68,8 @@ pnpm test:cov
 ## Deploy a producción
 
 ```bash
-# Build apuntando al ALB de producción
-VITE_API_URL=http://jp-store-alb-1031393668.us-east-1.elb.amazonaws.com pnpm build
+# Build — VITE_API_URL apunta a CloudFront (HTTPS); el proxy /api/* reenvía al backend
+VITE_API_URL=https://d1ooypu8bqmie2.cloudfront.net pnpm build
 
 # Subir a S3
 aws s3 sync dist/ s3://jp-store-frontend --delete --region us-east-1
