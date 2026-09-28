@@ -34,6 +34,7 @@ export interface Transaction {
   id: string
   customerId: string
   productId: string
+  quantity: number
   status: TransactionStatus
   amountInCents: number
   baseFeeInCents: number
